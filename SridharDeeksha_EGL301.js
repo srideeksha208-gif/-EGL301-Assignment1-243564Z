@@ -337,5 +337,43 @@ module.exports = {
         return "Ticket not found";
     },
 
+    
+    // FUNCTION 5: Show the number of visitors waiting for a ride.
+    getQueueSummary(rideId) {
+
+        // Search for the ride using its ID.
+        for (let i = 0; i < rides.length; i++) {
+
+            if (rides[i].rideId == rideId) {
+
+                let regular = 0;
+                let virtual = 0;
+
+                // Check the tickets in the ride queue.
+                for (let j = 0; j < rides[i].queue.length; j++) {
+
+                    if (rides[i].queue[j].queueType == "Regular") {
+                        regular = regular + 1;
+                    }
+
+                    if (rides[i].queue[j].queueType == "Virtual") {
+                        virtual = virtual + 1;
+                    }
+                }
+
+                // Return the queue summary.
+                return {
+                    rideName: rides[i].rideName,
+                    totalWaiting: rides[i].queue.length,
+                    regularQueue: regular,
+                    virtualQueue: virtual
+                };
+            }
+        }
+
+        return "Ride not found";
+    }
+
+
 
 };

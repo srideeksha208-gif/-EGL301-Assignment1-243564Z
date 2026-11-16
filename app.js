@@ -75,3 +75,11 @@ console.log(queuecare.leaveQueue("Q999"));
 // Test 16: Alex joins again after cancelling.
 console.log("Test 16: Alex joins again");
 console.log(queuecare.joinQueue("V001", "R001"));
+
+console.log("===== Function 5 Testing =====");
+
+// Check Dragon Coaster queue summary.
+console.log(queuecare.getQueueSummary("R001"));
+
+// Check invalid ride.
+console.log(queuecare.getQueueSummary("R999"));

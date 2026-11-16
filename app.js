@@ -22,3 +22,19 @@ console.log(queuecare.joinQueue("V999", "R001"));
 // Test 5: Visitor tries to join a ride under maintenance
 console.log("Test 5: Ride under maintenance");
 console.log(queuecare.joinQueue("V003", "R003"));
+
+
+console.log("===== Testing Function 2 =====");
+
+// Check Alex's ticket
+console.log("Test 6: Check Alex's queue status");
+console.log(queuecare.getQueueStatus("Q1"));
+
+// Check Sarah's ticket
+console.log("Test 7: Check Sarah's queue status");
+console.log(queuecare.getQueueStatus("Q2"));
+
+// Check a ticket that does not exist
+console.log("Test 8: Invalid ticket");
+console.log(queuecare.getQueueStatus("Q999"));
+

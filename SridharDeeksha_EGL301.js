@@ -200,6 +200,50 @@ module.exports = {
         visitor.ticketNumber = ticket.ticketNumber;
 
         return ticket;
-    }
+
+    },
+
+    // Function 2: Check a visitor's queue status
+    getQueueStatus(ticketNumber) {
+
+        // Search through all the rides
+        for (let i = 0; i < rides.length; i++) {
+
+            // Search through the queue of each ride
+            for (let j = 0; j < rides[i].queue.length; j++) {
+
+                // Check if the ticket number matches
+                if (rides[i].queue[j].ticketNumber === ticketNumber) {
+
+                    let position = j + 1;
+                    let waitTime = null;
+
+                    // Calculate wait only if the ride is open
+                    if (rides[i].status === "Open") {
+                        let capacity = rides[i].capacity;
+                        let cycleTime = rides[i].cycleTime;
+
+                        if (capacity > 0 && cycleTime > 0) {
+                            let cycles = Math.ceil(position / capacity);
+                            waitTime = cycles * cycleTime;
+                        }
+                    }
+
+                    // Return the visitor's queue information
+                    return {
+                        ticketNumber: ticketNumber,
+                        rideName: rides[i].rideName,
+                        queuePosition: position,
+                        queueType: rides[i].queue[j].queueType,
+                        estimatedWait: waitTime,
+                        rideStatus: rides[i].status
+                    };
+                }
+            }
+        }
+
+        return "Ticket not found";
+    },
+
 };
 

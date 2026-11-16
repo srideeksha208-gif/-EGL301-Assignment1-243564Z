@@ -335,7 +335,7 @@ module.exports = {
 
         // If no matching ticket was found.
         return "Ticket not found";
-    }
+    },
 
 
 };

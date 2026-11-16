@@ -3,8 +3,6 @@
 //Elderly visitors, young children, and people with special needs who are eligible for assistance can use a virtual queue to wait comfortably elsewhere until their turn. 
 //basically queue management in theme parks 
 
-let rides = [ride1, ride2, ride3];
-
 
 let ride1 = {
     rideId: "R001",
@@ -33,8 +31,7 @@ let ride3 = {
     queue: []
 };
 
-let vistors = [visitor1, visitor2, visitor3, visitor4, visitor5,
-               visitor6, visitor7, visitor8, visitor9, visitor10];
+let rides = [ride1, ride2, ride3];
 
 
 let visitor1 = {
@@ -42,7 +39,7 @@ let visitor1 = {
     visitorName: "Alex",
     queueType: "Virtual",
     approved: true,
-    ticketNumber: "Q001"
+    ticketNumber: ""
 };
 
 let visitor2 = {
@@ -50,7 +47,7 @@ let visitor2 = {
     visitorName: "Sarah",
     queueType: "Regular",
     approved: false,
-    ticketNumber: "Q002"
+    ticketNumber: ""
 };
 
 let visitor3 = {
@@ -58,7 +55,7 @@ let visitor3 = {
     visitorName: "Daniel",
     queueType: "Virtual",
     approved: true,
-    ticketNumber: "Q003"
+    ticketNumber: ""
 };
 
 let visitor4 = {
@@ -66,7 +63,7 @@ let visitor4 = {
     visitorName: "Emma",
     queueType: "Regular",
     approved: false,
-    ticketNumber: "Q004"
+    ticketNumber: ""
 };
 
 let visitor5 = {
@@ -74,7 +71,7 @@ let visitor5 = {
     visitorName: "Ryan",
     queueType: "Regular",
     approved: false,
-    ticketNumber: "Q005"
+    ticketNumber: ""
 };
 
 let visitor6 = {
@@ -82,7 +79,7 @@ let visitor6 = {
     visitorName: "Sophia",
     queueType: "Virtual",
     approved: true,
-    ticketNumber: "Q006"
+    ticketNumber: ""
 };
 
 let visitor7 = {
@@ -90,7 +87,7 @@ let visitor7 = {
     visitorName: "Ethan",
     queueType: "Regular",
     approved: false,
-    ticketNumber: "Q007"
+    ticketNumber: ""
 };
 
 let visitor8 = {
@@ -98,7 +95,7 @@ let visitor8 = {
     visitorName: "Olivia",
     queueType: "Virtual",
     approved: true,
-    ticketNumber: "Q008"
+    ticketNumber: ""
 };
 
 let visitor9 = {
@@ -106,7 +103,7 @@ let visitor9 = {
     visitorName: "Noah",
     queueType: "Regular",
     approved: false,
-    ticketNumber: "Q009"
+    ticketNumber: ""
 };
 
 let visitor10 = {
@@ -114,12 +111,95 @@ let visitor10 = {
     visitorName: "Mia",
     queueType: "Virtual",
     approved: true,
-    ticketNumber: "Q010"
+    ticketNumber: ""
 };
 
 
+let visitors = [visitor1, visitor2, visitor3, visitor4, visitor5,
+               visitor6, visitor7, visitor8, visitor9, visitor10];
+
+
+let nextTicketNumber = 1;
 
 
 module.exports = {
-    // Your existing starter functions remain here
-}
+
+    // Function 1: Add a visitor to a ride queue
+    joinQueue(visitorId, rideId) {
+
+        let visitor = null;
+        let ride = null;
+
+        // Find the visitor
+        for (let i = 0; i < visitors.length; i++) {
+            if (visitors[i].visitorId === visitorId) {
+                visitor = visitors[i];
+                break;
+            }
+        }
+
+        // Find the ride
+        for (let i = 0; i < rides.length; i++) {
+            if (rides[i].rideId === rideId) {
+                ride = rides[i];
+                break;
+            }
+        }
+
+        // Check if visitor and ride exist
+        if (visitor === null) {
+            return "Visitor not found";
+        }
+
+        if (ride === null) {
+            return "Ride not found";
+        }
+
+        // Check if the ride is open
+        if (ride.status !== "Open") {
+            return "Ride is not open";
+        }
+
+        // Check the visitor's queue type
+        if (visitor.queueType !== "Regular" &&
+            visitor.queueType !== "Virtual") {
+            return "Invalid queue type";
+        }
+
+        // Check approval for virtual queue
+        if (visitor.queueType === "Virtual" &&
+            visitor.approved !== true) {
+            return "Virtual queue not approved";
+        }
+
+        // Check if visitor is already in any ride queue
+        for (let i = 0; i < rides.length; i++) {
+            for (let j = 0; j < rides[i].queue.length; j++) {
+                if (rides[i].queue[j].visitorId === visitorId) {
+                    return "Visitor is already in a queue";
+                }
+            }
+        }
+
+        // Create a queue ticket
+        let ticket = {
+            ticketNumber: "Q" + nextTicketNumber,
+            visitorId: visitor.visitorId,
+            visitorName: visitor.visitorName,
+            rideId: ride.rideId,
+            queueType: visitor.queueType
+        };
+
+        // Update the ticket number
+        nextTicketNumber = nextTicketNumber + 1;
+
+        // Add the ticket to the ride queue
+        ride.queue.push(ticket);
+
+        // Save the ticket number in the visitor record
+        visitor.ticketNumber = ticket.ticketNumber;
+
+        return ticket;
+    }
+};
+

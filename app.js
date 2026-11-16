@@ -83,3 +83,11 @@ console.log(queuecare.getQueueSummary("R001"));
 
 // Check invalid ride.
 console.log(queuecare.getQueueSummary("R999"));
+
+
+console.log("===== Function 6 Testing =====");
+
+// Test 1: Find the ride with the shortest waiting time.
+console.log("Test: Find shortest queue");
+console.log(queuecare.getShortestQueue());
+

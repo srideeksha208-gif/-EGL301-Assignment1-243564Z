@@ -372,8 +372,51 @@ module.exports = {
         }
 
         return "Ride not found";
-    }
+    },
 
+
+    // FUNCTION 6: Find the ride with the shortest waiting time.
+    getShortestQueue() {
+
+        let shortestRide = null;
+        let shortestWait = null;
+
+        // Check all the rides.
+        for (let i = 0; i < rides.length; i++) {
+
+            // Only check rides that are open.
+            if (rides[i].status == "Open") {
+
+                // Find the position of the next visitor.
+                let position = rides[i].queue.length + 1;
+
+                // Use Function 3 to calculate waiting time.
+                let waitTime = this.calculateWaitTime(
+                    rides[i].rideId, position
+                );
+
+                // Check if this ride has a shorter waiting time.
+                if (shortestRide == null || waitTime < shortestWait) {
+
+                    shortestRide = rides[i];
+                    shortestWait = waitTime;
+                }
+            }
+        }
+
+        // Check if there are any open rides.
+        if (shortestRide == null) {
+            return "No open rides available";
+        }
+
+        // Return the recommended ride.
+        return {
+            rideId: shortestRide.rideId,
+            rideName: shortestRide.rideName,
+            visitorsWaiting: shortestRide.queue.length,
+            estimatedWait: shortestWait
+        };
+    }
 
 
 };

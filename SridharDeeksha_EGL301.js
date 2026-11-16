@@ -1,8 +1,7 @@
-// queue management system designed to reduce long waiting times and improve accessibility at theme parks. 
-//It allows visitors to check ride availability, view estimated waiting times, and receive queue numbers.
-//Elderly visitors, young children, and people with special needs who are eligible for assistance can use a virtual queue to wait comfortably elsewhere until their turn. 
-//basically queue management in theme parks 
 
+ // QueueCare - Theme Park Queue Management System
+ // Helps visitors check ride availability and get queue numbers.
+ // Approved virtual queue visitors can wait elsewhere until their turn.
 
 let ride1 = {
     rideId: "R001",
@@ -31,8 +30,8 @@ let ride3 = {
     queue: []
 };
 
+// Store all rides in one array.
 let rides = [ride1, ride2, ride3];
-
 
 let visitor1 = {
     visitorId: "V001",
@@ -114,74 +113,73 @@ let visitor10 = {
     ticketNumber: ""
 };
 
+// Store all visitors in one array.
+let visitors = [
+    visitor1, visitor2, visitor3, visitor4, visitor5,
+    visitor6, visitor7, visitor8, visitor9, visitor10
+];
 
-let visitors = [visitor1, visitor2, visitor3, visitor4, visitor5,
-               visitor6, visitor7, visitor8, visitor9, visitor10];
-
-
+// Start the ticket numbering from Q1.
 let nextTicketNumber = 1;
 
 
 module.exports = {
 
-    // Function 1: Add a visitor to a ride queue
+    // FUNCTION 1: Add a visitor to a ride queue.
     joinQueue(visitorId, rideId) {
 
         let visitor = null;
         let ride = null;
 
-        // Find the visitor
+        // Find the visitor using the visitor ID.
         for (let i = 0; i < visitors.length; i++) {
-            if (visitors[i].visitorId === visitorId) {
+            if (visitors[i].visitorId == visitorId) {
                 visitor = visitors[i];
                 break;
             }
         }
 
-        // Find the ride
+        // Find the ride using the ride ID.
         for (let i = 0; i < rides.length; i++) {
-            if (rides[i].rideId === rideId) {
+            if (rides[i].rideId == rideId) {
                 ride = rides[i];
                 break;
             }
         }
 
-        // Check if visitor and ride exist
-        if (visitor === null) {
+        // Check if the visitor exists.
+        if (visitor == null) {
             return "Visitor not found";
         }
 
-        if (ride === null) {
+        // Check if the ride exists.
+        if (ride == null) {
             return "Ride not found";
         }
 
-        // Check if the ride is open
-        if (ride.status !== "Open") {
+        // Check if the ride is open.
+        if (ride.status != "Open") {
             return "Ride is not open";
         }
 
-        // Check the visitor's queue type
-        if (visitor.queueType !== "Regular" &&
-            visitor.queueType !== "Virtual") {
+        // Check whether the queue type is valid.
+        if (visitor.queueType != "Regular" &&
+            visitor.queueType != "Virtual") {
             return "Invalid queue type";
         }
 
-        // Check approval for virtual queue
-        if (visitor.queueType === "Virtual" &&
-            visitor.approved !== true) {
+        // Virtual queue visitors must be approved.
+        if (visitor.queueType == "Virtual" &&
+            visitor.approved != true) {
             return "Virtual queue not approved";
         }
 
-        // Check if visitor is already in any ride queue
-        for (let i = 0; i < rides.length; i++) {
-            for (let j = 0; j < rides[i].queue.length; j++) {
-                if (rides[i].queue[j].visitorId === visitorId) {
-                    return "Visitor is already in a queue";
-                }
-            }
+        // Check if the visitor already has a ticket.
+        if (visitor.ticketNumber != "") {
+            return "Visitor already has a ticket";
         }
 
-        // Create a queue ticket
+        // Create a new queue ticket.
         let ticket = {
             ticketNumber: "Q" + nextTicketNumber,
             visitorId: visitor.visitorId,
@@ -190,46 +188,41 @@ module.exports = {
             queueType: visitor.queueType
         };
 
-        // Update the ticket number
-        nextTicketNumber = nextTicketNumber + 1;
+        // Add the ticket to the end of the ride queue.
+        ride.queue[ride.queue.length] = ticket;
 
-        // Add the ticket to the ride queue
-        ride.queue.push(ticket);
-
-        // Save the ticket number in the visitor record
+        // Save the ticket number in the visitor record.
         visitor.ticketNumber = ticket.ticketNumber;
 
-        return ticket;
+        // Increase the number for the next ticket.
+        nextTicketNumber = nextTicketNumber + 1;
 
+        // Return the new ticket.
+        return ticket;
     },
 
-    // Function 2: Check a visitor's queue status
+
+    // FUNCTION 2: Check a visitor's queue status.
     getQueueStatus(ticketNumber) {
 
-        // Search through all the rides
+        // Search through all the rides.
         for (let i = 0; i < rides.length; i++) {
 
-            // Search through the queue of each ride
+            // Search through each ride's queue.
             for (let j = 0; j < rides[i].queue.length; j++) {
 
-                // Check if the ticket number matches
-                if (rides[i].queue[j].ticketNumber === ticketNumber) {
+                // Check if the ticket number matches.
+                if (rides[i].queue[j].ticketNumber == ticketNumber) {
 
+                    // Array indexes start at 0, so add 1.
                     let position = j + 1;
-                    let waitTime = null;
 
-                    // Calculate wait only if the ride is open
-                    if (rides[i].status === "Open") {
-                        let capacity = rides[i].capacity;
-                        let cycleTime = rides[i].cycleTime;
+                    // Use Function 3 to calculate waiting time.
+                    let waitTime = this.calculateWaitTime(
+                        rides[i].rideId, position
+                    );
 
-                        if (capacity > 0 && cycleTime > 0) {
-                            let cycles = Math.ceil(position / capacity);
-                            waitTime = cycles * cycleTime;
-                        }
-                    }
-
-                    // Return the visitor's queue information
+                    // Return the queue information.
                     return {
                         ticketNumber: ticketNumber,
                         rideName: rides[i].rideName,
@@ -242,8 +235,54 @@ module.exports = {
             }
         }
 
+        // Return a message if the ticket is not found.
         return "Ticket not found";
     },
 
-};
 
+    // FUNCTION 3: Calculate the estimated waiting time.
+    calculateWaitTime(rideId, position) {
+
+        let ride = null;
+
+        // Search for the ride using its ID.
+        for (let i = 0; i < rides.length; i++) {
+            if (rides[i].rideId == rideId) {
+                ride = rides[i];
+                break;
+            }
+        }
+
+        // Check if the ride exists.
+        if (ride == null) {
+            return "Ride not found";
+        }
+
+        // Check if the ride is open.
+        if (ride.status != "Open") {
+            return "Ride is not open";
+        }
+
+        // Check if the ride information is valid.
+        if (ride.capacity <= 0 || ride.cycleTime <= 0) {
+            return "Invalid ride settings";
+        }
+
+        // Check if the queue position is valid.
+        if (position == undefined || position <= 0) {
+            return "Invalid queue position";
+        }
+
+        // Start counting the number of ride cycles.
+        let cycles = 0;
+
+        // Count how many ride cycles are needed.
+        for (let people = 0; people < position; people = people + ride.capacity) {
+            cycles = cycles + 1;
+        }
+
+        // Calculate the total estimated waiting time.
+        return cycles * ride.cycleTime;
+    }
+
+};

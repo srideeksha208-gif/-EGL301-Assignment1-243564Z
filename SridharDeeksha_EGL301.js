@@ -283,6 +283,59 @@ module.exports = {
 
         // Calculate the total estimated waiting time.
         return cycles * ride.cycleTime;
+    },
+
+    // FUNCTION 4: Allow a visitor to leave the queue.
+    leaveQueue(ticketNumber) {
+
+        // Search through all the rides.
+        for (let i = 0; i < rides.length; i++) {
+
+            // Create an empty array to store remaining tickets.
+            let newQueue = [];
+            let found = false;
+            let visitorId = "";
+
+            // Check each ticket in the ride queue.
+            for (let j = 0; j < rides[i].queue.length; j++) {
+
+                // Check if the ticket number matches.
+                if (rides[i].queue[j].ticketNumber == ticketNumber) {
+
+                    // Remember which visitor is leaving.
+                    found = true;
+                    visitorId = rides[i].queue[j].visitorId;
+
+                } else {
+
+                    // Keep tickets that are not cancelled.
+                    newQueue[newQueue.length] = rides[i].queue[j];
+                }
+            }
+
+            // If the ticket was found in this ride.
+            if (found == true) {
+
+                // Replace the old queue with the remaining tickets.
+                rides[i].queue = newQueue;
+
+                // Find the visitor and clear their ticket number.
+                for (let k = 0; k < visitors.length; k++) {
+
+                    if (visitors[k].visitorId == visitorId) {
+                        visitors[k].ticketNumber = "";
+                        break;
+                    }
+                }
+
+                // Return a confirmation message.
+                return ticketNumber + " has left the queue";
+            }
+        }
+
+        // If no matching ticket was found.
+        return "Ticket not found";
     }
+
 
 };

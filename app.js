@@ -52,3 +52,26 @@ console.log(queuecare.calculateWaitTime("R001", 9));
 // Test 11: Calculate waiting time for a ride under maintenance.
 console.log("Test 11: Maintenance ride");
 console.log(queuecare.calculateWaitTime("R003", 1));
+
+
+console.log("===== Function 4 Testing =====");
+
+// Test 12: Alex cancels his ticket.
+console.log("Test 12: Alex leaves the queue");
+console.log(queuecare.leaveQueue("Q1"));
+
+// Test 13: Check whether Alex's ticket was removed.
+console.log("Test 13: Check cancelled ticket");
+console.log(queuecare.getQueueStatus("Q1"));
+
+// Test 14: Check Sarah's updated queue position.
+console.log("Test 14: Check Sarah's position");
+console.log(queuecare.getQueueStatus("Q2"));
+
+// Test 15: Try cancelling a ticket that does not exist.
+console.log("Test 15: Invalid ticket");
+console.log(queuecare.leaveQueue("Q999"));
+
+// Test 16: Alex joins again after cancelling.
+console.log("Test 16: Alex joins again");
+console.log(queuecare.joinQueue("V001", "R001"));

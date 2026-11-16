@@ -91,3 +91,30 @@ console.log("===== Function 6 Testing =====");
 console.log("Test: Find shortest queue");
 console.log(queuecare.getShortestQueue());
 
+
+console.log("===== Function 7 Testing =====");
+
+// Test 1: Change Jungle Rapids from Maintenance to Open.
+console.log("Test 1: Open Jungle Rapids");
+console.log(queuecare.updateRideStatus("R003", "Open"));
+
+// Test 2: Daniel can now join Jungle Rapids.
+console.log("Test 2: Daniel joins Jungle Rapids");
+console.log(queuecare.joinQueue("V003", "R003"));
+
+// Test 3: Close Dragon Coaster.
+console.log("Test 3: Close Dragon Coaster");
+console.log(queuecare.updateRideStatus("R001", "Closed"));
+
+// Test 4: Emma tries to join a closed ride.
+console.log("Test 4: Emma joins closed ride");
+console.log(queuecare.joinQueue("V004", "R001"));
+
+// Test 5: Try to update a ride that does not exist.
+console.log("Test 5: Invalid ride");
+console.log(queuecare.updateRideStatus("R999", "Open"));
+
+// Test 6: Try entering an invalid status.
+console.log("Test 6: Invalid status");
+console.log(queuecare.updateRideStatus("R002", "Broken"));
+

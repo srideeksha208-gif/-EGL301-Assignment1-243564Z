@@ -416,7 +416,45 @@ module.exports = {
             visitorsWaiting: shortestRide.queue.length,
             estimatedWait: shortestWait
         };
+    },
+
+    // FUNCTION 7: Update the operating status of a ride.
+    updateRideStatus(rideId, newStatus) {
+
+        let ride = null;
+
+        // Search for the ride using its ID.
+        for (let i = 0; i < rides.length; i++) {
+
+            if (rides[i].rideId == rideId) {
+                ride = rides[i];
+                break;
+            }
+        }
+
+        // Check if the ride exists.
+        if (ride == null) {
+            return "Ride not found";
+        }
+
+        // Check if the new status is valid.
+        if (newStatus != "Open" &&
+            newStatus != "Closed" &&
+            newStatus != "Maintenance") {
+            return "Invalid ride status";
+        }
+
+        // Change the ride's current status.
+        ride.status = newStatus;
+
+        // Return the updated ride information.
+        return {
+            rideId: ride.rideId,
+            rideName: ride.rideName,
+            status: ride.status
+        };
     }
+
 
 
 };

@@ -3,8 +3,7 @@
 #  Assignment 1 –  Inclusive Theme Park Queue System
 
 ## Project Description
-
-QueueCare is a theme park queue management system designed to reduce waiting difficulties and improve accessibility for visitors.
+A theme park queue management system designed to reduce waiting difficulties and improve accessibility for visitors.
 
 It allows visitors to join ride queues, receive queue tickets, check their positions and view estimated waiting times.
 

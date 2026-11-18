@@ -22,13 +22,6 @@ The project uses JavaScript and Node.js, with arrays and objects to simulate rid
 6. **getShortestQueue()** – Recommends the open ride with the shortest estimated waiting time.
 7. **updateRideStatus(rideId, newStatus)** – Allows ride status to be changed to Open, Closed or Maintenance.
 
-## How to Run
-
-1. Open the project folder in Visual Studio Code.
-2. Make sure Node.js is installed.
-3. Open the terminal.
-4. Run `node app.js`.
-5. View the test results in the terminal.
 
 ## References
 

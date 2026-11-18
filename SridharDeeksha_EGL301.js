@@ -1,5 +1,5 @@
 
- // QueueCare - Theme Park Queue Management System
+ //  Theme Park Queue Management System
  // Helps visitors check ride availability and get queue numbers.
  // Approved virtual queue visitors can wait elsewhere until their turn.
 
